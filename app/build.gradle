@@ -5,9 +5,18 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlin-parcelize'
     id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
-
 }
 
+kotlin {
+    sourceSets {
+        debug {
+            kotlin.srcDir("build/generated/ksp/debug/kotlin")
+        }
+        release {
+            kotlin.srcDir("build/generated/ksp/release/kotlin")
+        }
+    }
+}
 android {
     namespace 'com.alina.stockmarketapp'
     compileSdk 34
@@ -31,11 +40,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -43,9 +54,10 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.1'
+        kotlinCompilerExtensionVersion compose_version
     }
-    packaging {
+
+    packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
@@ -53,22 +65,17 @@ android {
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.1'
-    implementation 'androidx.activity:activity-compose:1.9.0'
-    implementation platform('androidx.compose:compose-bom:2023.08.00')
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.activity:activity-compose:1.3.1'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation platform('androidx.compose:compose-bom:2023.08.00')
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // OpenCSV
@@ -77,8 +84,6 @@ dependencies {
     // Compose dependencies
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "com.google.accompanist:accompanist-flowlayout:0.17.0"
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
     implementation "androidx.activity:activity-compose:1.6.0-alpha01"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.24.2-alpha"
 
@@ -86,16 +91,12 @@ dependencies {
     implementation 'io.github.raamcosta.compose-destinations:core:1.1.2-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.1.2-beta'
 
-    // Coil
-    implementation "io.coil-kt:coil-compose:1.4.0"
-
     //Dagger - Hilt
-    implementation "com.google.dagger:hilt-android:2.51.1"
-    kapt "com.google.dagger:hilt-compiler:2.51.1"
+    implementation "com.google.dagger:hilt-android:2.40.5"
+    kapt "com.google.dagger:hilt-android-compiler:2.40.5"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-    implementation 'androidx.hilt:hilt-work:1.0.0'
-    // When using Kotlin.
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -109,5 +110,4 @@ dependencies {
 
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.4.2"
-
 }
